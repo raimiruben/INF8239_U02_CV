@@ -1,0 +1,141 @@
+{
+  "classes": [
+    "camiseta",
+    "pantalón",
+    "suéter",
+    "vestido",
+    "abrigo",
+    "sandalia",
+    "camisa",
+    "zapatilla",
+    "bolso",
+    "botín"
+  ],
+  "partitions": {
+    "train": {
+      "images": 54000,
+      "image_shape": [
+        28,
+        28
+      ],
+      "dtype": "uint8",
+      "pixel_min": 0,
+      "pixel_max": 255,
+      "class_counts": {
+        "camiseta": 5370,
+        "pantalón": 5416,
+        "suéter": 5398,
+        "vestido": 5395,
+        "abrigo": 5367,
+        "sandalia": 5409,
+        "camisa": 5435,
+        "zapatilla": 5445,
+        "bolso": 5384,
+        "botín": 5381
+      },
+      "class_proportions": {
+        "camiseta": 0.0994,
+        "pantalón": 0.1003,
+        "suéter": 0.1,
+        "vestido": 0.0999,
+        "abrigo": 0.0994,
+        "sandalia": 0.1002,
+        "camisa": 0.1006,
+        "zapatilla": 0.1008,
+        "bolso": 0.0997,
+        "botín": 0.0996
+      },
+      "duplicate_images_within": 0,
+      "fingerprint": "ab0e9065dde7cc48"
+    },
+    "valid": {
+      "images": 6000,
+      "image_shape": [
+        28,
+        28
+      ],
+      "dtype": "uint8",
+      "pixel_min": 0,
+      "pixel_max": 255,
+      "class_counts": {
+        "camiseta": 630,
+        "pantalón": 584,
+        "suéter": 602,
+        "vestido": 605,
+        "abrigo": 633,
+        "sandalia": 591,
+        "camisa": 565,
+        "zapatilla": 555,
+        "bolso": 616,
+        "botín": 619
+      },
+      "class_proportions": {
+        "camiseta": 0.105,
+        "pantalón": 0.0973,
+        "suéter": 0.1003,
+        "vestido": 0.1008,
+        "abrigo": 0.1055,
+        "sandalia": 0.0985,
+        "camisa": 0.0942,
+        "zapatilla": 0.0925,
+        "bolso": 0.1027,
+        "botín": 0.1032
+      },
+      "duplicate_images_within": 0,
+      "fingerprint": "c2d8795551cb3fde"
+    },
+    "test": {
+      "images": 10000,
+      "image_shape": [
+        28,
+        28
+      ],
+      "dtype": "uint8",
+      "pixel_min": 0,
+      "pixel_max": 255,
+      "class_counts": {
+        "camiseta": 1000,
+        "pantalón": 1000,
+        "suéter": 1000,
+        "vestido": 1000,
+        "abrigo": 1000,
+        "sandalia": 1000,
+        "camisa": 1000,
+        "zapatilla": 1000,
+        "bolso": 1000,
+        "botín": 1000
+      },
+      "class_proportions": {
+        "camiseta": 0.1,
+        "pantalón": 0.1,
+        "suéter": 0.1,
+        "vestido": 0.1,
+        "abrigo": 0.1,
+        "sandalia": 0.1,
+        "camisa": 0.1,
+        "zapatilla": 0.1,
+        "bolso": 0.1,
+        "botín": 0.1
+      },
+      "duplicate_images_within": 0,
+      "fingerprint": "9f1ec356a747bfe4"
+    }
+  },
+  "overlap_identical_images": {
+    "valid_and_train": 0,
+    "test_and_train": 0,
+    "test_and_valid": 0
+  },
+  "normalized_train": {
+    "shape": [
+      54000,
+      28,
+      28,
+      1
+    ],
+    "dtype": "float32",
+    "min": 0.0,
+    "max": 1.0
+  },
+  "partition_reproducible": true
+}
