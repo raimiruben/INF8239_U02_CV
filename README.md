@@ -7,8 +7,8 @@ Autor académico: Edwin Ramón José Nolasco
 ```bash
 uv python install 3.12
 uv sync --extra cpu
-uv run python scripts/check\\\_runtime.py
-uv run python scripts/train\\\_cv.py --epochs 8
+uv run python scripts/check\\\\\\\_runtime.py
+uv run python scripts/train\\\\\\\_cv.py --epochs 8
 ```
 
 ## GPU
@@ -19,7 +19,7 @@ La ruta GPU se utiliza solamente en WSL2/Linux con NVIDIA correctamente configur
 uv sync --extra gpu
 ```
 
-Complete `MODEL\\\_CARD.md` después de analizar métricas, errores y costo.
+Complete `MODEL\\\\\\\_CARD.md` después de analizar métricas, errores y costo.
 
 
 
@@ -29,7 +29,7 @@ Complete `MODEL\\\_CARD.md` después de analizar métricas, errores y costo.
 
 
 
-Misma partición (54 000 entrenamiento / 6 000 validación / 10 000 prueba), semilla 42, 8 épocas, CPU. Detalle por clase, hardware y limitaciones en \[`MODEL\\\_CARD.md`](MODEL\_CARD.md).
+Misma partición (54 000 entrenamiento / 6 000 validación / 10 000 prueba), semilla 42, 8 épocas, CPU. Detalle por clase, hardware y limitaciones en \[`MODEL\\\\\\\_CARD.md`](MODEL\_CARD.md).
 
 
 
@@ -51,7 +51,7 @@ Misma partición (54 000 entrenamiento / 6 000 validación / 10 000 prueba), sem
 
 
 
-Artefactos: `reports/cv\\\_metrics.json`, `reports/confusion\\\_cnn.png`, `reports/cnn\\\_errors.png` y `models/best\\\_cnn.keras`.
+Artefactos: `reports/cv\\\\\\\_metrics.json`, `reports/confusion\\\\\\\_cnn.png`, `reports/cnn\\\\\\\_errors.png` y `models/best\\\\\\\_cnn.keras`.
 
 
 
@@ -59,7 +59,7 @@ Artefactos: `reports/cv\\\_metrics.json`, `reports/confusion\\\_cnn.png`, `repor
 
 
 
-`reports/cnn\\\_errors.png` muestra los \*\*primeros 16 errores\*\* de la CNN en el conjunto de prueba (R = clase real, P = predicha; filas y columnas de arriba abajo y de izquierda a derecha). No son una muestra aleatoria: ilustran patrones, y la frecuencia real está en `reports/confusion\\\_cnn.png`.
+`reports/cnn\\\\\\\_errors.png` muestra los \*\*primeros 16 errores\*\* de la CNN en el conjunto de prueba (R = clase real, P = predicha; filas y columnas de arriba abajo y de izquierda a derecha). No son una muestra aleatoria: ilustran patrones, y la frecuencia real está en `reports/confusion\\\\\\\_cnn.png`.
 
 
 
@@ -83,17 +83,17 @@ Conclusión: la mitad de los errores mostrados (8 de 16) ocurren entre prendas s
 
 
 
-\- `scripts/bench\\\_inference.py`: mide el tiempo de inferencia (mediana de 7 repeticiones tras calentamiento) y el tamaño de ambos modelos sin optimizador.
+\- `scripts/bench\\\\\\\_inference.py`: mide el tiempo de inferencia (mediana de 7 repeticiones tras calentamiento) y el tamaño de ambos modelos sin optimizador.
 
-\- `scripts/dense\\\_per\\\_class.py`: reentrena solo el baseline denso con la misma partición y semilla para obtener su reporte por clase. Reproduce exactamente el F1 macro de `cv\\\_metrics.json` en este equipo.
+\- `scripts/dense\\\\\\\_per\\\\\\\_class.py`: reentrena solo el baseline denso con la misma partición y semilla para obtener su reporte por clase. Reproduce exactamente el F1 macro de `cv\\\\\\\_metrics.json` en este equipo.
 
 
 
 ```bash
 
-uv run python scripts/bench\\\_inference.py
+uv run python scripts/bench\\\\\\\_inference.py
 
-uv run python scripts/dense\\\_per\\\_class.py
+uv run python scripts/dense\\\\\\\_per\\\\\\\_class.py
 
 uv run pytest -q
 
@@ -138,4 +138,122 @@ Entorno de la corrida: Windows 11, Python 3.12.14, TensorFlow 2.21.0, solo CPU. 
 
 
 \*\*Decisión antes de usar otro dominio.\*\* No trasladar ninguno de los dos modelos tal cual. Validar con datos reales del dominio y por clase, entrenar la CNN hasta que converja antes de volver a compararla, y definir qué errores son críticos y quién los revisa. Siguiente experimento: repetir con más épocas para distinguir si la CNN no convergió o si su arquitectura limita su capacidad.
+
+
+
+
+
+
+
+\## Evidencia visual
+
+
+
+!\[Curvas de entrenamiento y validación](reports/training\_curves.png)
+
+
+
+!\[Matriz de confusión de la CNN](reports/confusion\_cnn.png)
+
+
+
+!\[Primeros 16 errores de la CNN](reports/cnn\_errors.png)
+
+
+
+!\[Distribución de clases por partición](reports/audit\_class\_distribution.png)
+
+
+
+\## Ejecución completa (orden recomendado)
+
+
+
+```bash
+
+uv python install 3.12
+
+uv sync --extra cpu
+
+uv run pytest -q                              # 3 pruebas
+
+uv run python scripts/audit\_cv.py             # auditoría y huellas de las particiones
+
+uv run python scripts/train\_cv.py --epochs 8  # baseline denso y CNN: métricas, matriz, errores y modelo
+
+uv run python scripts/plot\_curves.py          # curvas de entrenamiento y validación
+
+uv run python scripts/bench\_inference.py      # inferencia (mediana de 7) y tamaño de los modelos
+
+uv run python scripts/dense\_per\_class.py      # reporte por clase del baseline denso
+
+```
+
+
+
+| Script | Archivos que genera |
+
+|---|---|
+
+| `scripts/audit\_cv.py` | `reports/audit\_cv.json`, `reports/audit\_class\_distribution.png` |
+
+| `scripts/train\_cv.py` | `reports/cv\_metrics.json`, `reports/confusion\_cnn.png`, `reports/cnn\_errors.png`, `models/best\_cnn.keras` |
+
+| `scripts/plot\_curves.py` | `reports/training\_curves.png`, `reports/history.json` |
+
+| `scripts/bench\_inference.py` y `scripts/dense\_per\_class.py` | Solo imprimen en consola |
+
+
+
+El `.gitignore` excluye `models/\*.keras`, `reports/\*.png` y `reports/\*.json`. Los resultados de referencia se versionaron con `git add -f`, así que volver a ejecutar los scripts los deja modificados en `git status`. Los tiempos absolutos varían entre ejecuciones (dependen de la carga de la CPU); con semilla 42 y operaciones deterministas, las métricas se reproducen exactamente en este equipo.
+
+
+
+\## Alternativa con pip
+
+
+
+Requiere Python 3.12. `requirements.txt` se generó desde `uv.lock` con `uv export --no-hashes --no-emit-project --extra cpu -o requirements.txt`.
+
+
+
+```powershell
+
+python -m venv .venv
+
+.venv\\Scripts\\Activate.ps1
+
+pip install -r requirements.txt
+
+pytest -q
+
+$env:PYTHONPATH = "src"
+
+python scripts/train\_cv.py --epochs 8
+
+```
+
+
+
+En Linux o macOS: `source .venv/bin/activate` y `PYTHONPATH=src python scripts/train\_cv.py --epochs 8`. En Colab: `%pip install -r requirements-colab.txt` y ejecutar los scripts con `PYTHONPATH=src`.
+
+
+
+\## Notebook ejecutado
+
+
+
+`notebooks/ejercicio04.ipynb` reúne en una sola ejecución la auditoría (con comprobación de las huellas), el entrenamiento de ambos modelos con la misma partición y semilla, las curvas, las métricas por clase, las matrices de confusión, los errores, el costo, las pruebas y la decisión técnica. Se entrega ya ejecutado, y para reejecutarlo:
+
+
+
+```bash
+
+uv run --with nbconvert --with ipykernel python -m nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=3600 notebooks/ejercicio04.ipynb
+
+```
+
+
+
+Tarda unos 7 minutos en CPU y no sobrescribe `reports/` ni `models/`. La diferencia del F1 macro frente a `reports/cv\_metrics.json` es 0 en ambos modelos.
 

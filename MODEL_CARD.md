@@ -6,7 +6,7 @@
 
 
 
-\- \*\*Modelo evaluado:\*\* `small\_cnn` (guardado en `models/best\_cnn.keras`), comparado con un baseline `dense\_baseline` que no se guarda.
+\- \*\*Modelo evaluado:\*\* `small\\\_cnn` (guardado en `models/best\\\_cnn.keras`), comparado con un baseline `dense\\\_baseline` que no se guarda.
 
 \- \*\*Proyecto:\*\* inf8239-u02-cv 0.1.0 (INF-8239, U02.LAB07 · Ejercicio 04). \*\*Autor:\*\* Raimi De Jesús. \*\*Corrida de referencia:\*\* 2026-10-08.
 
@@ -16,7 +16,7 @@
 
 \- \*\*Arquitectura del baseline:\*\* Flatten → Dense(64, ReLU) → Dense(10, softmax).
 
-\- \*\*Entrenamiento común:\*\* Adam, entropía cruzada categórica dispersa, lote de 128, 8 épocas, EarlyStopping (paciencia 2, restaura los mejores pesos), semilla 42 y `TF\_DETERMINISTIC\_OPS=1`.
+\- \*\*Entrenamiento común:\*\* Adam, entropía cruzada categórica dispersa, lote de 128, 8 épocas, EarlyStopping (paciencia 2, restaura los mejores pesos), semilla 42 y `TF\\\_DETERMINISTIC\\\_OPS=1`.
 
 \- \*\*Reproducibilidad:\*\* con esa semilla y operaciones deterministas, reentrenar el denso reprodujo el F1 macro exactamente en este equipo. No se garantiza igualdad binaria entre plataformas.
 
@@ -46,6 +46,8 @@ No debe usarse para clasificar fotografías reales de prendas, ni como evidencia
 
 \- \*\*Particiones:\*\* 54 000 para entrenar y 6 000 para validar (las últimas 6 000 del conjunto de entrenamiento, sin barajar); 10 000 de prueba, con 1 000 por clase. Ambos modelos usan exactamente la misma partición.
 
+\- \*\*Auditoría y huellas:\*\* `scripts/audit\_cv.py` encontró 0 duplicados dentro de cada partición y 0 imágenes idénticas entre particiones. Huellas SHA-256 (16 primeros caracteres): entrenamiento `ab0e9065dde7cc48`, validación `c2d8795551cb3fde`, prueba `9f1ec356a747bfe4`. La validación no está estratificada (entre 9,3 % y 10,6 % por clase); entrenamiento y validación suman 6 000 imágenes por clase.
+
 \- \*\*Etiquetas:\*\* 0 camiseta, 1 pantalón, 2 suéter, 3 vestido, 4 abrigo, 5 sandalia, 6 camisa, 7 zapatilla, 8 bolso, 9 botín (orden estándar del dataset; el script solo muestra los números).
 
 
@@ -54,7 +56,7 @@ No debe usarse para clasificar fotografías reales de prendas, ni como evidencia
 
 
 
-Normalización de los píxeles con `normalize\_images` y validación de forma y rango con `validate\_images` (`src/inf8239\_u02\_cv/data.py`). Las pruebas (`uv run pytest -q`) verifican forma y rango de las imágenes, número de clases y salida del modelo.
+Los píxeles `uint8` (0 a 255) se normalizan con `normalize\_images` a `float32` entre 0,0 y 1,0 y se añade un canal, con forma `(N, 28, 28, 1)`; `validate\_images` verifica forma y rango (`src/inf8239\_u02\_cv/data.py`).
 
 
 
@@ -114,11 +116,13 @@ La clase más difícil para ambos modelos es la camisa. En la CNN, 274 de 1 000 
 
 \- \*\*Parámetros:\*\* denso 50 890; CNN 19 466.
 
-\- \*\*Tiempo de entrenamiento:\*\* denso 13,0 s; CNN 187,6 s (14,4×). El script completo tardó unos 4 min 36 s.
+\- \*\*Tiempo de entrenamiento:\*\* denso 13,0 s; CNN 187,6 s (14,4× en la corrida oficial). El script completo tardó unos 4 min 36 s.
 
 \- \*\*Tiempo de inferencia:\*\* denso 0,0546 ms/imagen; CNN 0,1522 ms/imagen (2,8×). Mediana de 7 repeticiones tras calentamiento, sobre las 10 000 imágenes de prueba.
 
 \- \*\*Tamaño del archivo (sin optimizador):\*\* denso 220 815 B; CNN 105 347 B.
+
+\- \*\*Variabilidad:\*\* los tiempos absolutos dependen de la carga de la CPU. En una segunda ejecución (`notebooks/ejercicio04.ipynb`) el entrenamiento tardó 23,0 s (denso) y 228,5 s (CNN), unas 10 veces, y la inferencia 0,0931 y 0,2633 ms por imagen (2,8 veces). La razón de inferencia es estable; la de entrenamiento varía entre unas 10 y 14 veces.
 
 
 
